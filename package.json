@@ -9,6 +9,7 @@
   "categories": [
     "Other"
   ],
+  "license": "MIT",
   "activationEvents": [
     "onLanguage:markdown"
   ],
