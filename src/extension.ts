@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     const currentLine = editor.selection.active.line;
     const { text } = editor.document.lineAt(currentLine);
 
-    const translated = `翻訳 ${text}\n\n`;
+    const translated = `\n翻訳 ${text}\n\n`;
 
     const position = new vscode.Position(currentLine, 0);
 
