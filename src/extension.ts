@@ -17,20 +17,20 @@ export function activate(context: vscode.ExtensionContext) {
     ): vscode.TextEdit[] {
       console.log(`fmt::`, {document});
       const text = document.getText();
-      console.log({text});
       const fullRange = new vscode.Range(
         document.positionAt(0),
-        document.positionAt(text.length - 1)
+        document.positionAt(text.length)
       );
-      console.log({fullRange});
       try {
-      const formatted = format(text);
-      console.log({formatted});
-    } catch (err) {
-      console.error(err);
-    }
-    const formatted = format(text);
-    return [vscode.TextEdit.replace(fullRange, formatted)];
+        const formatted = format(text);
+        return [vscode.TextEdit.replace(fullRange, formatted)];
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error(err);
+          vscode.window.showInformationMessage(err.message);
+        }
+        return [];
+      }
     },
   });
 

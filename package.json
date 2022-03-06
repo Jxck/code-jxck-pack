@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:Markdown"
+    "onLanguage:markdown"
   ],
   "main": "./dist/extension.js",
   "scripts": {
