@@ -1,6 +1,7 @@
 {
   "name": "jxck",
   "displayName": "jxck",
+  "publisher": "jxck",
   "description": "jxck extension pack",
   "version": "0.0.1",
   "engines": {
