@@ -35,6 +35,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   let disposable = vscode.commands.registerCommand("jxck.translate", () => {
     vscode.window.showInformationMessage("Translate En->Jp");
+
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return vscode.window.showWarningMessage("No active text editor found!");
+    }
+    const { text } = editor.document.lineAt(editor.selection.active.line);
+    vscode.window.showInformationMessage(text);
   });
 
   context.subscriptions.push(disposable);

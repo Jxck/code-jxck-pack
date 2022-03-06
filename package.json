@@ -21,6 +21,13 @@
         "command": "jxck.translate",
         "title": "Translate En->Jp"
       }
+    ],
+    "keybindings": [
+      {
+        "command": "jxck.translate",
+        "when": "editorTextFocus",
+        "key": "alt+t"
+      }
     ]
   },
   "main": "./dist/extension.js",
