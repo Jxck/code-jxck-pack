@@ -40,7 +40,16 @@ export function activate(context: vscode.ExtensionContext) {
     if (!editor) {
       return vscode.window.showWarningMessage("No active text editor found!");
     }
-    const { text } = editor.document.lineAt(editor.selection.active.line);
+    const currentLine = editor.selection.active.line;
+    const { text } = editor.document.lineAt(currentLine);
+
+    const translated = `翻訳 ${text}\n\n`;
+
+    const position = new vscode.Position(currentLine, 0);
+
+    editor.edit(builder => {
+      builder.replace(position, translated);
+    })
     vscode.window.showInformationMessage(text);
   });
 
