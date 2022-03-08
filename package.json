@@ -60,6 +60,7 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "@jxck/markdown": "^0.0.5"
+    "@jxck/markdown": "^0.0.5",
+    "deepl": "^1.0.13"
   }
 }
