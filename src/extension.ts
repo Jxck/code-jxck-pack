@@ -66,10 +66,10 @@ export function activate(context: vscode.ExtensionContext) {
         .map(({ text }) => text)
         .join("\n");
 
-      const position = new vscode.Position(currentLine, 0);
+      const position = new vscode.Position(currentLine, text.length);
 
       editor.edit((builder) => {
-        builder.replace(position, `\n${translated}\n\n`);
+        builder.replace(position, `\n\n${translated}\n`);
       });
       vscode.window.showInformationMessage(text);
     }
