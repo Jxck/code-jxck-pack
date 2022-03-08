@@ -5,9 +5,9 @@ This is vscode extension pack for Jxck personal use.
 ## publish
 
 ```sh
-$ vscode publish patch
-$ vscode login jxck
-$ vscode publish
+$ vsce publish patch
+$ vsce login jxck
+$ vsce publish
 ```
 
 https://marketplace.visualstudio.com/manage/publishers/
