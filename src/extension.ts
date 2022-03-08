@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
@@ -53,10 +55,10 @@ export function activate(context: vscode.ExtensionContext) {
         return vscode.window.showErrorMessage("Deepl Auth Key is missing");
       }
       const result = await translate({
-        free_api: false,
         text,
-        target_lang: "JA",
         auth_key,
+        free_api: false,
+        target_lang: "JA",
       });
       console.log({ result });
 
