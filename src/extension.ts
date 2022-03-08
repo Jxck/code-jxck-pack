@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { format } from "@jxck/markdown";
+import translate = require("deepl");
+
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -33,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     },
   });
 
-  let disposable = vscode.commands.registerCommand("jxck.translate", () => {
+  let disposable = vscode.commands.registerCommand("jxck.translate", async () => {
     vscode.window.showInformationMessage("Translate En->Jp");
 
     const editor = vscode.window.activeTextEditor;
@@ -43,7 +45,15 @@ export function activate(context: vscode.ExtensionContext) {
     const currentLine = editor.selection.active.line;
     const { text } = editor.document.lineAt(currentLine);
 
-    const translated = `\n翻訳 ${text}\n\n`;
+    const result = await translate({
+      free_api: false,
+      text,
+      target_lang: "JA",
+      auth_key: ""
+    });
+    console.log({result});
+
+    const translated = result.data.translations.map(({text}) => text).join("\n") + "\n";
 
     const position = new vscode.Position(currentLine, 0);
 
