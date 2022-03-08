@@ -28,7 +28,17 @@
         "when": "editorTextFocus",
         "key": "alt+t"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "jxck",
+      "properties": {
+        "jxck.deepl_auth_key": {
+          "type": "string",
+          "default": null,
+          "description": "Deepl API Key"
+        }
+      }
+    }
   },
   "main": "./dist/extension.js",
   "scripts": {
