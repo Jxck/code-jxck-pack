@@ -47,9 +47,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     const position = new vscode.Position(currentLine, 0);
 
-    editor.edit(builder => {
+    editor.edit((builder) => {
       builder.replace(position, translated);
-    })
+    });
     vscode.window.showInformationMessage(text);
   });
 
