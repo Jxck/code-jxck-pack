@@ -39,7 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "jxck.translate",
     async () => {
-      vscode.window.showInformationMessage("Translate En->Jp");
+      const config = vscode.workspace.getConfiguration("jxck");
+      const auth_key = config.deepl_auth_key;
+      const target_lang = config.deepl_target_lang;
+
+      vscode.window.showInformationMessage(`Translate to ${target_lang}`);
 
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
@@ -48,17 +52,14 @@ export function activate(context: vscode.ExtensionContext) {
       const currentLine = editor.selection.active.line;
       const { text } = editor.document.lineAt(currentLine);
 
-      const config = vscode.workspace.getConfiguration("jxck");
-      const auth_key = config.deepl_auth_key;
-
       if (!auth_key) {
         return vscode.window.showErrorMessage("Deepl Auth Key is missing");
       }
       const result = await translate({
         text,
         auth_key,
+        target_lang,
         free_api: false,
-        target_lang: "JA",
       });
       console.log({ result });
 

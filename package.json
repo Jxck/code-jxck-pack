@@ -36,6 +36,11 @@
           "type": "string",
           "default": null,
           "description": "Deepl API Key"
+        },
+        "jxck.deepl_target_lang": {
+          "type": "string",
+          "default": "JA",
+          "description": "Deepl Target Lang"
         }
       }
     }
