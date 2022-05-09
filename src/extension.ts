@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
         text,
         auth_key,
         target_lang,
-        free_api: false,
+        free_api: false
       });
       console.log({ result });
 
