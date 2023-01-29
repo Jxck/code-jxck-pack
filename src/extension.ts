@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(`Congratulations, your extension "jxck" is now active!`)
 
   /**
-   * DEEPL
+   * Deepl
    */
   vscode.languages.registerDocumentFormattingEditProvider("markdown", {
     provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
@@ -68,6 +68,42 @@ export function activate(context: vscode.ExtensionContext) {
   })
 
   context.subscriptions.push(disposable)
+
+  /**
+   * Highlight
+   */
+  const decorationType = vscode.window.createTextEditorDecorationType({
+    backgroundColor: "yellow"
+  })
+
+  decorate(vscode.window.activeTextEditor)
+
+  vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
+
+  vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
+
+  function decorate(editor?: vscode.TextEditor) {
+    if (editor === undefined) return
+    if (editor.document.languageId !== "subtitles") return // only .vtt
+    const text = editor.document.getText()
+    const lines = text.split("\n")
+    const decorations: vscode.DecorationOptions[] = []
+
+    // highlight Alpha + Katakana
+    const base = /[a-zA-Z\p{sc=Katakana}ー]+/gu
+    lines.forEach((line, i) => {
+      let result
+      while ((result = base.exec(line))) {
+        const from = new vscode.Position(i, result.index)
+        const to = new vscode.Position(i, result.index + result[0].length)
+        const range = new vscode.Range(from, to)
+        const decoration = { range }
+        decorations.push(decoration)
+      }
+    })
+
+    editor.setDecorations(decorationType, decorations)
+  }
 }
 
 // this method is called when your extension is deactivated
