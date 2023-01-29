@@ -9,4 +9,7 @@ $ vsce login jxck
 $ vsce publish patch
 ```
 
-https://marketplace.visualstudio.com/manage/publishers/
+- marketplace
+  - https://marketplace.visualstudio.com/manage/publishers/
+- PAT
+  - https://dev.azure.com/blockrxckinbeats/_usersSettings/tokens
