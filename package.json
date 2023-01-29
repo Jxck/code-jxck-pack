@@ -54,7 +54,6 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
     "fmt": "prettier -w src/**/*.ts *.json *.js *.md",
     "test": "node ./out/test/runTest.js"
   },
@@ -63,10 +62,7 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "18.x",
     "@types/vscode": "^1.74.0",
-    "@typescript-eslint/eslint-plugin": "^5.49.0",
-    "@typescript-eslint/parser": "^5.49.0",
     "@vscode/test-electron": "^2.2.2",
-    "eslint": "^8.33.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
     "prettier": "^2.8.3",
