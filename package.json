@@ -1,88 +1,89 @@
 {
-	"name": "jxck",
-	"displayName": "jxck",
-	"publisher": "jxck",
-	"description": "jxck extension pack",
-	"version": "0.3.7",
-	"engines": {
-		"vscode": "^1.73.1"
-	},
-	"categories": [
-		"Other"
-	],
-	"license": "MIT",
-	"activationEvents": [
-		"onLanguage:markdown",
-		"onCommand:jxck.translate"
-	],
-	"contributes": {
-		"commands": [
-			{
-				"command": "jxck.translate",
-				"title": "Translate En->Jp"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "jxck.translate",
-				"when": "editorTextFocus",
-				"key": "ctrl+t"
-			}
-		],
-		"configuration": {
-			"title": "jxck",
-			"properties": {
-				"jxck.deepl_auth_key": {
-					"type": "string",
-					"default": null,
-					"description": "Deepl API Key"
-				},
-				"jxck.deepl_target_lang": {
-					"type": "string",
-					"default": "JA",
-					"description": "Deepl Target Lang"
-				}
-			}
-		}
-	},
-	"main": "./dist/extension.js",
-	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack",
-		"watch": "webpack --watch",
-		"package": "webpack --mode production --devtool hidden-source-map",
-		"compile-tests": "tsc -p . --outDir out",
-		"watch-tests": "tsc -p . -w --outDir out",
-		"pretest": "npm run compile-tests && npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^8.0.1",
-		"@types/mocha": "^10.0.1",
-		"@types/node": "18.x",
-		"@types/vscode": "^1.74.0",
-		"@typescript-eslint/eslint-plugin": "^5.49.0",
-		"@typescript-eslint/parser": "^5.49.0",
-		"@vscode/test-electron": "^2.2.2",
-		"eslint": "^8.33.0",
-		"glob": "^8.1.0",
-		"mocha": "^10.2.0",
-		"prettier": "^2.8.3",
-		"ts-loader": "^9.4.2",
-		"typescript": "^4.9.4",
-		"vsce": "^2.14.0",
-		"webpack": "^5.75.0",
-		"webpack-cli": "^5.0.1"
-	},
-	"dependencies": {
-		"@jxck/markdown": "^0.3.1",
-		"deepl": "^1.0.13"
-	},
-	"__metadata": {
-		"id": "5d4e8b8b-05fc-45f2-b6f2-daf5d21f5645",
-		"publisherDisplayName": "jxck",
-		"publisherId": "938d491a-143c-44ad-ba8e-7713e200ac9b",
-		"isPreReleaseVersion": false
-	}
+  "name": "jxck",
+  "displayName": "jxck",
+  "publisher": "jxck",
+  "description": "jxck extension pack",
+  "version": "0.3.7",
+  "engines": {
+    "vscode": "^1.73.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "license": "MIT",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:jxck.translate"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "jxck.translate",
+        "title": "Translate En->Jp"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "jxck.translate",
+        "when": "editorTextFocus",
+        "key": "ctrl+t"
+      }
+    ],
+    "configuration": {
+      "title": "jxck",
+      "properties": {
+        "jxck.deepl_auth_key": {
+          "type": "string",
+          "default": null,
+          "description": "Deepl API Key"
+        },
+        "jxck.deepl_target_lang": {
+          "type": "string",
+          "default": "JA",
+          "description": "Deepl Target Lang"
+        }
+      }
+    }
+  },
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "fmt": "prettier -w src/**/*.ts *.json *.js *.md",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.1",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "@vscode/test-electron": "^2.2.2",
+    "eslint": "^8.33.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.3",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "vsce": "^2.14.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "@jxck/markdown": "^0.3.1",
+    "deepl": "^1.0.13"
+  },
+  "__metadata": {
+    "id": "5d4e8b8b-05fc-45f2-b6f2-daf5d21f5645",
+    "publisherDisplayName": "jxck",
+    "publisherId": "938d491a-143c-44ad-ba8e-7713e200ac9b",
+    "isPreReleaseVersion": false
+  }
 }
