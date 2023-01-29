@@ -9,8 +9,11 @@ import translate = require("deepl")
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "jxck" is now active!')
+  console.log(`Congratulations, your extension "jxck" is now active!`)
 
+  /**
+   * DEEPL
+   */
   vscode.languages.registerDocumentFormattingEditProvider("markdown", {
     provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
       console.log(`fmt::`, { document })
@@ -29,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   })
 
-  let disposable = vscode.commands.registerCommand("jxck.translate", async () => {
+  const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
     const config = vscode.workspace.getConfiguration("jxck")
     const auth_key = config.deepl_auth_key
     const target_lang = config.deepl_target_lang
