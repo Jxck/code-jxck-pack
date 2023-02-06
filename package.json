@@ -13,13 +13,17 @@
   "license": "MIT",
   "activationEvents": [
     "onLanguage:markdown",
-    "onCommand:jxck.translate"
+    "onLanguage:subtitles"
   ],
   "contributes": {
     "commands": [
       {
         "command": "jxck.translate",
         "title": "Translate En->Jp"
+      },
+      {
+        "command": "jxck.highlight",
+        "title": "Highlight vtt"
       }
     ],
     "keybindings": [
