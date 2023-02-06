@@ -31,43 +31,44 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   })
+  ;(() => {
+    const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
+      const config = vscode.workspace.getConfiguration("jxck")
+      const auth_key = config.deepl_auth_key
+      const target_lang = config.deepl_target_lang
 
-  const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
-    const config = vscode.workspace.getConfiguration("jxck")
-    const auth_key = config.deepl_auth_key
-    const target_lang = config.deepl_target_lang
+      vscode.window.showInformationMessage(`Translate to ${target_lang}`)
 
-    vscode.window.showInformationMessage(`Translate to ${target_lang}`)
+      const editor = vscode.window.activeTextEditor
+      if (!editor) {
+        return vscode.window.showWarningMessage("No active text editor found!")
+      }
+      const currentLine = editor.selection.active.line
+      const { text } = editor.document.lineAt(currentLine)
 
-    const editor = vscode.window.activeTextEditor
-    if (!editor) {
-      return vscode.window.showWarningMessage("No active text editor found!")
-    }
-    const currentLine = editor.selection.active.line
-    const { text } = editor.document.lineAt(currentLine)
+      if (!auth_key) {
+        return vscode.window.showErrorMessage("Deepl Auth Key is missing")
+      }
+      const result = await translate({
+        text,
+        auth_key,
+        target_lang,
+        free_api: false
+      })
+      console.log({ result })
 
-    if (!auth_key) {
-      return vscode.window.showErrorMessage("Deepl Auth Key is missing")
-    }
-    const result = await translate({
-      text,
-      auth_key,
-      target_lang,
-      free_api: false
+      const translated = result.data.translations.map(({ text }) => text).join("\n")
+
+      const position = new vscode.Position(currentLine, text.length)
+
+      editor.edit((builder) => {
+        builder.replace(position, `\n\n${translated}\n`)
+      })
+      vscode.window.showInformationMessage(text)
     })
-    console.log({ result })
 
-    const translated = result.data.translations.map(({ text }) => text).join("\n")
-
-    const position = new vscode.Position(currentLine, text.length)
-
-    editor.edit((builder) => {
-      builder.replace(position, `\n\n${translated}\n`)
-    })
-    vscode.window.showInformationMessage(text)
-  })
-
-  context.subscriptions.push(disposable)
+    context.subscriptions.push(disposable)
+  })()
 
   /**
    * Highlight
@@ -82,9 +83,18 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
 
+  vscode.workspace.onWillSaveTextDocument((event) => {
+    const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
+    decorate(openEditor)
+  })
+
   function decorate(editor?: vscode.TextEditor) {
-    if (editor === undefined) return
-    if (editor.document.languageId !== "subtitles") return // only .vtt
+    if (editor === undefined) {
+      return vscode.window.showInformationMessage(`active editor not found for highlight`)
+    }
+    if (editor.document.languageId !== "subtitles") {
+      return vscode.window.showInformationMessage(`highlight only supported in .vtt`)
+    }
     const text = editor.document.getText()
     const lines = text.split("\n")
     const decorations: vscode.DecorationOptions[] = []
@@ -101,7 +111,15 @@ export function activate(context: vscode.ExtensionContext) {
         decorations.push(decoration)
       }
     })
+    ;(() => {
+      const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
+        vscode.window.showInformationMessage(`Highlight Enabled`)
+        const editor = vscode.window.activeTextEditor
+        decorate(editor)
+      })
 
+      context.subscriptions.push(disposable)
+    })()
     editor.setDecorations(decorationType, decorations)
   }
 }
