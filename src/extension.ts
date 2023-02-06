@@ -3,6 +3,7 @@
 import * as vscode from "vscode"
 import { format } from "@jxck/markdown"
 import translate = require("deepl")
+import { decorate } from "./highlight"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -73,10 +74,10 @@ export function activate(context: vscode.ExtensionContext) {
   /**
    * Highlight
    */
-  const decorationType = vscode.window.createTextEditorDecorationType({
-    backgroundColor: "yellow"
-  })
+  enable_highlight(context)
+}
 
+function enable_highlight(context: vscode.ExtensionContext) {
   decorate(vscode.window.activeTextEditor)
 
   vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
@@ -88,40 +89,11 @@ export function activate(context: vscode.ExtensionContext) {
     decorate(openEditor)
   })
 
-  function decorate(editor?: vscode.TextEditor) {
-    if (editor === undefined) {
-      return vscode.window.showInformationMessage(`active editor not found for highlight`)
-    }
-    if (editor.document.languageId !== "subtitles") {
-      return vscode.window.showInformationMessage(`highlight only supported in .vtt`)
-    }
-    const text = editor.document.getText()
-    const lines = text.split("\n")
-    const decorations: vscode.DecorationOptions[] = []
+  const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
+    decorate(vscode.window.activeTextEditor)
+  })
 
-    // highlight Alpha + Katakana
-    const base = /[a-zA-Z\p{sc=Katakana}ー]+/gu
-    lines.forEach((line, i) => {
-      let result
-      while ((result = base.exec(line))) {
-        const from = new vscode.Position(i, result.index)
-        const to = new vscode.Position(i, result.index + result[0].length)
-        const range = new vscode.Range(from, to)
-        const decoration = { range }
-        decorations.push(decoration)
-      }
-    })
-    ;(() => {
-      const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
-        vscode.window.showInformationMessage(`Highlight Enabled`)
-        const editor = vscode.window.activeTextEditor
-        decorate(editor)
-      })
-
-      context.subscriptions.push(disposable)
-    })()
-    editor.setDecorations(decorationType, decorations)
-  }
+  context.subscriptions.push(disposable)
 }
 
 // this method is called when your extension is deactivated
