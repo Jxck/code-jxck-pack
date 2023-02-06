@@ -2,8 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { format } from "@jxck/markdown"
-import translate = require("deepl")
 import { decorate } from "./highlight"
+import { translate } from "./translate"
+import deepl = require("deepl")
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -12,9 +13,11 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log(`Congratulations, your extension "jxck" is now active!`)
 
-  /**
-   * Deepl
-   */
+  enable_translate(context)
+  enable_highlight(context)
+}
+
+function enable_translate(context: vscode.ExtensionContext) {
   vscode.languages.registerDocumentFormattingEditProvider("markdown", {
     provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
       console.log(`fmt::`, { document })
@@ -32,49 +35,26 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   })
-  ;(() => {
-    const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
-      const config = vscode.workspace.getConfiguration("jxck")
-      const auth_key = config.deepl_auth_key
-      const target_lang = config.deepl_target_lang
 
-      vscode.window.showInformationMessage(`Translate to ${target_lang}`)
+  const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) {
+      return vscode.window.showWarningMessage("No active text editor found!")
+    }
 
-      const editor = vscode.window.activeTextEditor
-      if (!editor) {
-        return vscode.window.showWarningMessage("No active text editor found!")
-      }
-      const currentLine = editor.selection.active.line
-      const { text } = editor.document.lineAt(currentLine)
+    const config = vscode.workspace.getConfiguration("jxck")
+    const auth_key = config.deepl_auth_key as string
+    if (!auth_key) {
+      return vscode.window.showErrorMessage("Deepl Auth Key is missing")
+    }
 
-      if (!auth_key) {
-        return vscode.window.showErrorMessage("Deepl Auth Key is missing")
-      }
-      const result = await translate({
-        text,
-        auth_key,
-        target_lang,
-        free_api: false
-      })
-      console.log({ result })
+    const target_lang = config.deepl_target_lang || ("JA" as deepl.DeeplLanguages)
+    vscode.window.showInformationMessage(`Translate to ${target_lang}`)
 
-      const translated = result.data.translations.map(({ text }) => text).join("\n")
+    await translate(editor, auth_key, target_lang)
+  })
 
-      const position = new vscode.Position(currentLine, text.length)
-
-      editor.edit((builder) => {
-        builder.replace(position, `\n\n${translated}\n`)
-      })
-      vscode.window.showInformationMessage(text)
-    })
-
-    context.subscriptions.push(disposable)
-  })()
-
-  /**
-   * Highlight
-   */
-  enable_highlight(context)
+  context.subscriptions.push(disposable)
 }
 
 function enable_highlight(context: vscode.ExtensionContext) {
