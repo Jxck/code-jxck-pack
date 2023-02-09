@@ -39,7 +39,7 @@ function enable_translate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
     const editor = vscode.window.activeTextEditor
     if (!editor) {
-      return vscode.window.showWarningMessage("No active text editor found!")
+      return console.error("No active text editor found!")
     }
 
     const config = vscode.workspace.getConfiguration("jxck")

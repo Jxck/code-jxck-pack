@@ -2,12 +2,11 @@ import * as vscode from "vscode"
 
 export function decorate(editor?: vscode.TextEditor) {
   if (editor === undefined) {
-    return vscode.window.showInformationMessage("active editor not found for highlight")
+    return console.error("active editor not found for highlight")
   }
   if (editor.document.languageId !== "subtitles") {
-    return vscode.window.showInformationMessage("highlight only supported in .vtt")
+    return console.error("highlight only supported in .vtt")
   }
-  vscode.window.showInformationMessage("Highlight Enabled")
 
   const text = editor.document.getText()
   const lines = text.split("\n")
