@@ -19,11 +19,15 @@
     "commands": [
       {
         "command": "jxck.translate",
-        "title": "Translate En->Jp"
+        "title": "Jxck: Translate En->Jp"
       },
       {
         "command": "jxck.highlight",
-        "title": "Highlight vtt"
+        "title": "Jxck: Highlight vtt"
+      },
+      {
+        "command": "jxck.proofread",
+        "title": "Jxck: Proofreading"
       }
     ],
     "keybindings": [
@@ -45,6 +49,16 @@
           "type": "string",
           "default": "JA",
           "description": "Deepl Target Lang"
+        },
+        "jxck.openai_auth_key": {
+          "type": "string",
+          "default": null,
+          "description": "OpenAI API Key"
+        },
+        "jxck.openai_prompt": {
+          "type": "string",
+          "default": "文章の誤字、脱字、スペルミスを修正してください。",
+          "description": "OpenAI Prompt"
         }
       }
     }

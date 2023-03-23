@@ -5,6 +5,7 @@ import { format } from "@jxck/markdown"
 import { decorate } from "./highlight"
 import { translate } from "./translate"
 import deepl = require("deepl")
+import { proofread } from "./proofread"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -12,9 +13,10 @@ export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
   console.log(`Congratulations, your extension "jxck" is now active!`)
-
+  console.log(process.version)
   enable_translate(context)
   enable_highlight(context)
+  enable_proofread(context)
 }
 
 function enable_translate(context: vscode.ExtensionContext) {
@@ -52,6 +54,27 @@ function enable_translate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`Translate to ${target_lang}`)
 
     await translate(editor, auth_key, target_lang)
+  })
+
+  context.subscriptions.push(disposable)
+}
+
+function enable_proofread(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand("jxck.proofread", async () => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) {
+      return console.error("No active text editor found!")
+    }
+
+    const config = vscode.workspace.getConfiguration("jxck")
+    const auth_key = config.openai_auth_key as string
+    const instruction = config.openai_prompt as string
+
+    if (!auth_key) {
+      return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
+    }
+
+    await proofread(editor, auth_key, instruction)
   })
 
   context.subscriptions.push(disposable)
