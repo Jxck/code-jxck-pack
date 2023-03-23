@@ -1,4 +1,4 @@
-const apiKey = "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"
+const apiKey = ""
 
 import https from "https"
 
