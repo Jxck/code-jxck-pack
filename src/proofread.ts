@@ -37,6 +37,9 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
       })
       res.on("end", () => {
         const json = JSON.parse(chunks.join(""))
+        if (json.error) {
+          return fail(`${json.error.code}:${json.error.message}`)
+        }
         const text = json.choices[0].text
         done(text)
       })
