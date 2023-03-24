@@ -4,13 +4,17 @@ import { request, RequestOptions } from "https"
 export async function proofread(editor: vscode.TextEditor, auth_key: string, instruction: string) {
   const input = editor.document.getText(editor.selection)
 
-  const result = await openid_edit(input, auth_key, instruction)
-  console.log({ result })
+  try {
+    const result = await openid_edit(input, auth_key, instruction)
+    console.log({ result })
 
-  editor.edit((builder) => {
-    builder.replace(editor.selection, result)
-  })
-  vscode.window.showInformationMessage(result)
+    editor.edit((builder) => {
+      builder.replace(editor.selection, result)
+    })
+    vscode.window.showInformationMessage(result)
+  } catch (error) {
+    vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
+  }
 }
 
 async function post(url: string, body: object, option: RequestOptions): Promise<string> {
@@ -33,7 +37,7 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
       })
       res.on("end", () => {
         const json = JSON.parse(chunks.join(""))
-        const text = json.choices.at(0).text
+        const text = json.choices[0].text
         done(text)
       })
     })
