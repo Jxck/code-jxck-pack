@@ -29,13 +29,13 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
   }
 
   return new Promise((done, fail) => {
-    const chunks: Array<string> = []
+    const chunks: Array<Uint8Array> = []
     const req = request(options, (res) => {
       res.on("data", (chunk) => {
         chunks.push(chunk)
       })
       res.on("end", () => {
-        const json = JSON.parse(chunks.join(""))
+        const json = JSON.parse(Buffer.concat(chunks).toString())
         if (json.error) {
           return fail(`${json.error.code}:${json.error.message}`)
         }
