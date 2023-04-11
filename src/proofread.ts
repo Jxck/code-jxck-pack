@@ -16,6 +16,49 @@ export async function proofread(editor: vscode.TextEditor, auth_key: string, ins
   }
 }
 
+export async function proofreadAll(editor: vscode.TextEditor, auth_key: string, instruction: string) {
+  const document = editor.document
+  const text = document.getText()
+  const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
+
+  const sections = text
+    .split("\n")
+    .reduce(
+      (acc: Array<Array<string>>, curr) => {
+        if (curr.startsWith("#")) {
+          acc.unshift([curr])
+          return acc
+        }
+        acc.at(0)?.push(curr)
+        return acc
+      },
+      [[]]
+    )
+    .reverse()
+    .map((section) => section.join("\n"))
+
+  let proofed = text
+  try {
+    await Promise.all(
+      sections.map(async (section, i) => {
+        console.log({ section })
+        const result = await openid_edit(section, auth_key, instruction)
+        vscode.window.showInformationMessage(`${i}: ${result}`)
+        proofed = proofed.replace(section, result)
+        return proofed
+      })
+    )
+
+    vscode.window.showInformationMessage(`done`)
+
+    return editor.edit((builder) => {
+      builder.replace(fullRange, proofed)
+    })
+  } catch (error) {
+    vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
+  }
+}
+
 async function post(url: string, body: object, option: RequestOptions): Promise<string> {
   const { hostname, pathname } = new URL(url)
   const { method, headers } = option

@@ -28,6 +28,10 @@
       {
         "command": "jxck.proofread",
         "title": "Jxck: Proofreading"
+      },
+      {
+        "command": "jxck.proofreadAll",
+        "title": "Jxck: Proofreading full file"
       }
     ],
     "keybindings": [
