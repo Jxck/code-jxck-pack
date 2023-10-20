@@ -103,8 +103,16 @@ async function openid_edit(input: string, { auth_key, instruction, model }: { au
 
   const body = {
     model,
-    input,
-    instruction,
+    messages: [
+      {
+        role: "system",
+        context: instruction
+      },
+      {
+        role: "user",
+        context: input
+      }
+    ],
     temperature: 0.2
   }
 
