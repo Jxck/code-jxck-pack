@@ -83,7 +83,7 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
         if (json.error) {
           return fail(`${json.error.code}:${json.error.message}`)
         }
-        const text = json.choices[0].text.trim()
+        const text = json.choices[0].message.content.trim()
         done(text)
       })
     })
