@@ -70,12 +70,13 @@ function enable_proofread(context: vscode.ExtensionContext) {
     const config = vscode.workspace.getConfiguration("jxck")
     const auth_key = config.openai_auth_key as string
     const instruction = config.openai_prompt as string
+    const model = config.openai_prompt as string
 
     if (!auth_key) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofread(editor, auth_key, instruction)
+    await proofread(editor, { auth_key, model, instruction })
   })
 
   context.subscriptions.push(disposable)
@@ -91,12 +92,13 @@ function enable_proofreadAll(context: vscode.ExtensionContext) {
     const config = vscode.workspace.getConfiguration("jxck")
     const auth_key = config.openai_auth_key as string
     const instruction = config.openai_prompt as string
+    const model = config.openai_prompt as string
 
     if (!auth_key) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofreadAll(editor, auth_key, instruction)
+    await proofreadAll(editor, { auth_key, instruction, model })
   })
 
   context.subscriptions.push(disposable)

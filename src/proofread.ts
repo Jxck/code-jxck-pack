@@ -1,12 +1,12 @@
 import * as vscode from "vscode"
 import { request, RequestOptions } from "https"
 
-export async function proofread(editor: vscode.TextEditor, auth_key: string, instruction: string) {
+export async function proofread(editor: vscode.TextEditor, config: { auth_key: string; instruction: string; model: string }) {
   const selection = editor.selection
   const input = editor.document.getText(selection)
 
   try {
-    const result = await openid_edit(input, auth_key, instruction)
+    const result = await openid_edit(input, config)
     console.log({ result })
 
     editor.edit((builder) => builder.replace(selection, result))
@@ -16,7 +16,7 @@ export async function proofread(editor: vscode.TextEditor, auth_key: string, ins
   }
 }
 
-export async function proofreadAll(editor: vscode.TextEditor, auth_key: string, instruction: string) {
+export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key: string; instruction: string; model: string }) {
   const document = editor.document
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
@@ -42,7 +42,7 @@ export async function proofreadAll(editor: vscode.TextEditor, auth_key: string, 
     await Promise.all(
       sections.map(async (section, i) => {
         console.log({ section })
-        const result = await openid_edit(section, auth_key, instruction)
+        const result = await openid_edit(section, config)
         vscode.window.showInformationMessage(`${i}: ${result}`)
         proofed = proofed.replace(section, result)
         return proofed
@@ -94,13 +94,12 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
   })
 }
 
-async function openid_edit(input: string, auth_key: string, instruction: string) {
-  const apiUrl = "https://api.openai.com/v1/edits"
+async function openid_edit(input: string, { auth_key, instruction, model }: { auth_key: string; instruction: string; model: string }) {
+  const apiUrl = "https://api.openai.com/v1/chat/completions"
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`
   }
-  const model = "text-davinci-edit-001"
 
   const body = {
     model,
