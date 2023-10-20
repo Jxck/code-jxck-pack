@@ -106,11 +106,11 @@ async function openid_edit(input: string, { auth_key, instruction, model }: { au
     messages: [
       {
         role: "system",
-        context: instruction
+        content: instruction
       },
       {
         role: "user",
-        context: input
+        content: input
       }
     ],
     temperature: 0.2
