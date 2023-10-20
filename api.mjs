@@ -58,7 +58,7 @@ async function proof({ input }) {
 }
 
 const input = `
-この文章は、ところどころ間違っており、できれば修正して欲しいです。特に ChatGTP についての記述は注意したいです。
+この文章は、ところどろ間違っており、できれば習性して欲しいです。特に ChatGTP についての記述は注意したです。
 `.trim()
 
 const result = await proof({ input })
