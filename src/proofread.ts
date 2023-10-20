@@ -79,6 +79,7 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
       })
       res.on("end", () => {
         const json = JSON.parse(Buffer.concat(chunks).toString())
+        console.log(json)
         if (json.error) {
           return fail(`${json.error.code}:${json.error.message}`)
         }
