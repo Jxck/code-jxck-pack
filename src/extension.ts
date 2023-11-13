@@ -54,7 +54,12 @@ function enable_translate(context: vscode.ExtensionContext) {
     const target_lang = config.deepl_target_lang || ("JA" as deepl.DeeplLanguages)
     vscode.window.showInformationMessage(`Translate to ${target_lang}`)
 
-    await translate(editor, auth_key, target_lang)
+    const free_api = config.deepl_free_api as boolean
+    await translate(editor, {
+      auth_key,
+      target_lang,
+      free_api
+    })
   })
 
   context.subscriptions.push(disposable)

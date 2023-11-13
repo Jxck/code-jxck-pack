@@ -54,6 +54,11 @@
           "default": "JA",
           "description": "Deepl Target Lang"
         },
+        "jxck.deepl_free_api": {
+          "type": "boolean",
+          "default": true,
+          "description": "Deepl Free API"
+        },
         "jxck.openai_auth_key": {
           "type": "string",
           "default": null,

@@ -1,14 +1,17 @@
 import * as vscode from "vscode"
 import deepl = require("deepl")
 
-export async function translate(editor: vscode.TextEditor, auth_key: string, target_lang: deepl.DeeplLanguages) {
+export async function translate(
+  editor: vscode.TextEditor,
+  { auth_key, target_lang, free_api }: { auth_key: string; target_lang: deepl.DeeplLanguages; free_api: boolean }
+) {
   const currentLine = editor.selection.active.line
   const { text } = editor.document.lineAt(currentLine)
   const result = await deepl({
     text,
     auth_key,
     target_lang,
-    free_api: false
+    free_api
   })
   console.log({ result })
 
