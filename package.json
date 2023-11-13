@@ -59,6 +59,11 @@
           "default": null,
           "description": "OpenAI API Key"
         },
+        "jxck.openai_api_url": {
+          "type": "string",
+          "default": "https://api.openai.com/v1/chat/completions",
+          "description": "OpenAI API URL"
+        },
         "jxck.openai_model": {
           "type": "string",
           "default": "gpt-4",

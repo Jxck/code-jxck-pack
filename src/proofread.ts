@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { request, RequestOptions } from "https"
 
-export async function proofread(editor: vscode.TextEditor, config: { auth_key: string; instruction: string; model: string }) {
+export async function proofread(editor: vscode.TextEditor, config: { auth_key: string; api_url: URL, instruction: string; model: string }) {
   const selection = editor.selection
   const input = editor.document.getText(selection)
 
@@ -16,7 +16,7 @@ export async function proofread(editor: vscode.TextEditor, config: { auth_key: s
   }
 }
 
-export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key: string; instruction: string; model: string }) {
+export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key: string; api_url: URL, instruction: string; model: string }) {
   const document = editor.document
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
@@ -59,8 +59,8 @@ export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key
   }
 }
 
-async function post(url: string, body: object, option: RequestOptions): Promise<string> {
-  const { hostname, pathname } = new URL(url)
+async function post(url: URL, body: object, option: RequestOptions): Promise<string> {
+  const { hostname, pathname } = url
   const { method, headers } = option
 
   const options = {
@@ -95,8 +95,7 @@ async function post(url: string, body: object, option: RequestOptions): Promise<
   })
 }
 
-async function openid_edit(input: string, { auth_key, instruction, model }: { auth_key: string; instruction: string; model: string }) {
-  const apiUrl = "https://api.openai.com/v1/chat/completions"
+async function openid_edit(input: string, { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL, instruction: string; model: string }) {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`
@@ -117,7 +116,7 @@ async function openid_edit(input: string, { auth_key, instruction, model }: { au
     temperature: 0.2
   }
 
-  const res = await post(apiUrl, body, {
+  const res = await post(api_url, body, {
     method: "POST",
     headers: headers
   })
