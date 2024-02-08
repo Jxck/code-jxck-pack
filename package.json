@@ -90,12 +90,11 @@
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "pretest": "npm run fmt && npm run compile-tests && npm run compile",
     "fmt": "prettier -w src/**/*.ts *.json *.js *.md",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.x",
     "@types/vscode": "^1.86.0",
