@@ -78,6 +78,11 @@
           "type": "string",
           "default": "文章の誤字、脱字、スペルミスを修正してください。",
           "description": "OpenAI Prompt"
+        },
+        "jxck.openai_threshold": {
+          "type": "number",
+          "default": 100,
+          "description": "Difference Threshold"
         }
       }
     }

@@ -1,36 +1,50 @@
 import * as vscode from "vscode"
 import { request, RequestOptions } from "https"
 
-export async function proofread(editor: vscode.TextEditor, config: { auth_key: string; api_url: URL, instruction: string; model: string }) {
+type ProofReadConfig = {
+  auth_key: string
+  api_url: URL
+  instruction: string
+  model: string
+  threshold: number
+}
+
+export async function proofread(editor: vscode.TextEditor, config: ProofReadConfig) {
   const selection = editor.selection
   const input = editor.document.getText(selection)
 
   try {
     const result = await openai_edit(input, config)
-    console.log({ result })
 
-    editor.edit((builder) => builder.replace(selection, result))
-    vscode.window.showInformationMessage(result)
+    // diff が大きすぎる場合は何もしない
+    if (Math.abs(result.length - input.length) < config.threshold) {
+      console.log({ result })
+      editor.edit((builder) => builder.replace(selection, result))
+      vscode.window.showInformationMessage(result)
+    }
   } catch (error) {
     vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
   }
 }
 
-export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key: string; api_url: URL, instruction: string; model: string }) {
+export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadConfig) {
   const document = editor.document
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
 
   const sections = text
     .split("\n")
-    .reduce((acc: Array<Array<string>>, curr) => {
+    .reduce(
+      (acc: Array<Array<string>>, curr) => {
         if (curr.startsWith("#")) {
           acc.unshift([curr])
           return acc
         }
         acc.at(0)?.push(curr)
         return acc
-    }, [[]])
+      },
+      [[]]
+    )
     .reverse()
     .map((section) => section.join("\n"))
 
@@ -41,6 +55,10 @@ export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key
         console.log({ section })
         const result = await openai_edit(section, config)
         vscode.window.showInformationMessage(`${i}: ${result}`)
+        if (Math.abs(section.length - result.length) > config.threshold) {
+          // 変更が大きすぎる場合は無視
+          return proofed
+        }
         proofed = proofed.replace(section, result)
         return proofed
       })
@@ -92,7 +110,10 @@ async function post(url: URL, body: object, option: RequestOptions): Promise<str
   })
 }
 
-async function openai_edit(input: string, { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL, instruction: string; model: string }) {
+async function openai_edit(
+  input: string,
+  { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL; instruction: string; model: string }
+) {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`

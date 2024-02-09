@@ -77,12 +77,13 @@ function enable_proofread(context: vscode.ExtensionContext) {
     const api_url = new URL(config.openai_api_url as string)
     const instruction = config.openai_prompt as string
     const model = config.openai_model as string
+    const threshold = config.openai_threshold as number
 
     if (!auth_key) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofread(editor, { auth_key, api_url, model, instruction })
+    await proofread(editor, { auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
@@ -100,12 +101,13 @@ function enable_proofreadAll(context: vscode.ExtensionContext) {
     const api_url = new URL(config.openai_api_url as string)
     const instruction = config.openai_prompt as string
     const model = config.openai_model as string
+    const threshold = config.openai_threshold as number
 
     if (!auth_key) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofreadAll(editor, { auth_key, api_url, instruction, model })
+    await proofreadAll(editor, { auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
