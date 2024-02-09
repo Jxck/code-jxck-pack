@@ -6,7 +6,7 @@ export async function proofread(editor: vscode.TextEditor, config: { auth_key: s
   const input = editor.document.getText(selection)
 
   try {
-    const result = await openid_edit(input, config)
+    const result = await openai_edit(input, config)
     console.log({ result })
 
     editor.edit((builder) => builder.replace(selection, result))
@@ -23,17 +23,14 @@ export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key
 
   const sections = text
     .split("\n")
-    .reduce(
-      (acc: Array<Array<string>>, curr) => {
+    .reduce((acc: Array<Array<string>>, curr) => {
         if (curr.startsWith("#")) {
           acc.unshift([curr])
           return acc
         }
         acc.at(0)?.push(curr)
         return acc
-      },
-      [[]]
-    )
+    }, [[]])
     .reverse()
     .map((section) => section.join("\n"))
 
@@ -42,7 +39,7 @@ export async function proofreadAll(editor: vscode.TextEditor, config: { auth_key
     await Promise.all(
       sections.map(async (section, i) => {
         console.log({ section })
-        const result = await openid_edit(section, config)
+        const result = await openai_edit(section, config)
         vscode.window.showInformationMessage(`${i}: ${result}`)
         proofed = proofed.replace(section, result)
         return proofed
@@ -95,7 +92,7 @@ async function post(url: URL, body: object, option: RequestOptions): Promise<str
   })
 }
 
-async function openid_edit(input: string, { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL, instruction: string; model: string }) {
+async function openai_edit(input: string, { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL, instruction: string; model: string }) {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`
