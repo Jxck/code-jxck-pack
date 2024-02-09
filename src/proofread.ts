@@ -17,11 +17,11 @@ export async function proofread(editor: vscode.TextEditor, config: ProofReadConf
     const result = await openai_edit(input, config)
 
     // diff が大きすぎる場合は何もしない
-    if (Math.abs(result.length - input.length) < config.threshold) {
-      console.log({ result })
-      editor.edit((builder) => builder.replace(selection, result))
-      vscode.window.showInformationMessage(result)
-    }
+    if (Math.abs(result.length - input.length) < config.threshold) return
+
+    console.log({ result })
+    editor.edit((builder) => builder.replace(selection, result))
+    vscode.window.showInformationMessage(result)
   } catch (error) {
     vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
   }

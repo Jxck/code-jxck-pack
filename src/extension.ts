@@ -14,13 +14,14 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log(`Congratulations, your extension "jxck" is now active!`)
   console.log(process.version)
+  enable_format(context)
   enable_translate(context)
   enable_highlight(context)
   enable_proofread(context)
   enable_proofreadAll(context)
 }
 
-function enable_translate(context: vscode.ExtensionContext) {
+function enable_format(context: vscode.ExtensionContext) {
   vscode.languages.registerDocumentFormattingEditProvider("markdown", {
     provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
       console.log(`fmt::`, { document })
@@ -38,7 +39,9 @@ function enable_translate(context: vscode.ExtensionContext) {
       }
     }
   })
+}
 
+function enable_translate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand("jxck.translate", async () => {
     const editor = vscode.window.activeTextEditor
     if (!editor) {
