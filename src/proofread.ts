@@ -32,21 +32,35 @@ export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadC
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
 
-  const sections = text
-    .split("\n")
-    .reduce(
-      (acc: Array<Array<string>>, curr) => {
-        if (curr.startsWith("#")) {
-          acc.unshift([curr])
-          return acc
-        }
-        acc.at(0)?.push(curr)
-        return acc
-      },
-      [[]]
-    )
-    .reverse()
-    .map((section) => section.join("\n"))
+  const ext = document.fileName.split("\.").at(-1)
+
+  const sections = (() => {
+    if (ext === "md") {
+      return text
+        .split("\n")
+        .reduce(
+          (acc: Array<Array<string>>, curr) => {
+            if (curr.startsWith("#")) {
+              acc.unshift([curr])
+              return acc
+            }
+            acc.at(0)?.push(curr)
+            return acc
+          },
+          [[]]
+        )
+        .reverse()
+        .map((section) => section.join("\n"))
+    }
+    if (ext === "vtt") {
+      return text
+        .split("\n")
+        .filter((line) => line !== "" && /^\d\d:\d\d/.test(line) === false)
+    }
+    return text.split("\n")
+  })()
+
+  console.log(sections)
 
   let proofed = text
   try {
