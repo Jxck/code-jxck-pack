@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
 
-export type OpenAIConfig = {
+export type APIConfig = {
   auth_key: string
   api_url: URL
   instruction: string
@@ -9,10 +9,9 @@ export type OpenAIConfig = {
   temperature: number
 }
 
-export type APIConfig = OpenAIConfig
 export type APICall = (input: string, config: APIConfig) => Promise<string>
 
-export async function proofread(apiCall: APICall, config: OpenAIConfig) {
+export async function proofread(apiCall: APICall, config: APIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -36,7 +35,7 @@ export async function proofread(apiCall: APICall, config: OpenAIConfig) {
   }
 }
 
-export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
+export async function proofreadAll(apiCall: APICall, config: APIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -106,7 +105,7 @@ export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
   }
 }
 
-export async function openAIAPI(input: string, config: OpenAIConfig) {
+export async function openAIAPI(input: string, config: APIConfig) {
   const { auth_key, api_url, instruction, model, temperature } = config
   const headers = {
     "Content-Type": "application/json",
@@ -143,7 +142,7 @@ export async function openAIAPI(input: string, config: OpenAIConfig) {
   return text
 }
 
-export async function cloudeAPI(input: string, config: OpenAIConfig) {
+export async function cloudeAPI(input: string, config: APIConfig) {
   const { auth_key, api_url, instruction, model, temperature } = config
   const headers = {
     "x-api-key": auth_key,
