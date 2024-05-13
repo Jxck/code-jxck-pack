@@ -20,8 +20,8 @@ export async function proofread(apiCall: APICall, config: OpenAIConfig) {
 
   const selection = editor.selection
   const input = editor.document.getText(selection)
-  console.log({ input });
-  
+  console.log({ input })
+
   try {
     const result = await apiCall(input, config)
 
@@ -46,7 +46,7 @@ export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
 
-  const ext = document.fileName.split("\.").at(-1)
+  const ext = document.fileName.split(".").at(-1)
 
   const sections = (() => {
     if (ext === "md") {
@@ -67,9 +67,7 @@ export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
         .map((section) => section.join("\n"))
     }
     if (ext === "vtt") {
-      return text
-        .split("\n")
-        .filter((line) => line !== "" && /^\d\d:\d\d/.test(line) === false)
+      return text.split("\n").filter((line) => line !== "" && /^\d\d:\d\d/.test(line) === false)
     }
     return text.split("\n")
   })()
@@ -92,7 +90,7 @@ export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
       })
     )
 
-    results.forEach(({status}, i) => {
+    results.forEach(({ status }, i) => {
       if (status === "rejected") {
         vscode.window.showErrorMessage(`fail ${i}: ${status}`)
       }

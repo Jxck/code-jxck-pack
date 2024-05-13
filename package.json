@@ -111,7 +111,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run fmt && npm run compile-tests && npm run compile",
-    "fmt": "prettier -w src/**/*.ts *.json *.js *.md",
+    "fmt": "prettier -w src/*.ts *.json *.js *.md",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {

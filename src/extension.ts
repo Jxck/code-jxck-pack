@@ -83,7 +83,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
     threshold,
     temperature
   }
-  console.log({aiConfig: openAIConfig});
+  console.log({ aiConfig: openAIConfig })
   context.subscriptions.push(
     vscode.commands.registerCommand("jxck.openAI", async () => {
       if (!auth_key) {
