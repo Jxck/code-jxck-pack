@@ -9,7 +9,7 @@ export type openAIConfig = {
   threshold: number
 }
 
-export async function openAI(config: openAIConfig) {
+export async function proofread(config: openAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -32,7 +32,7 @@ export async function openAI(config: openAIConfig) {
   }
 }
 
-export async function openAIAll(config: openAIConfig) {
+export async function proofreadAll(config: openAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return console.error("No active text editor found!")
