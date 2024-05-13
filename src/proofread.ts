@@ -88,6 +88,17 @@ export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadC
   }
 }
 
+function withResolvers<T>() {
+  let resolve: (value: T | PromiseLike<T>) => void;
+  let reject: (value: unknown) => void;
+  const promise = new Promise<T>((_resolve, _reject) => {
+    resolve = _resolve
+    reject =  _reject
+  })
+  //@ts-ignore
+  return { promise, resolve, reject }
+}
+
 async function post(url: URL, body: object, option: RequestOptions): Promise<string> {
   const { hostname, pathname } = url
   const { method, headers } = option
@@ -100,28 +111,28 @@ async function post(url: URL, body: object, option: RequestOptions): Promise<str
     headers
   }
 
-  return new Promise((done, fail) => {
-    const chunks: Array<Uint8Array> = []
-    const req = request(options, (res) => {
-      res.on("data", (chunk) => {
-        chunks.push(chunk)
-      })
-      res.on("end", () => {
-        const json = JSON.parse(Buffer.concat(chunks).toString())
-        console.log(json)
-        if (json.error) {
-          return fail(`${json.error.code}:${json.error.message}`)
-        }
-        const text = json.choices[0].message.content.trim()
-        done(text)
-      })
+  const { promise, resolve, reject } = withResolvers<string>()
+  const chunks: Array<Uint8Array> = []
+  const req = request(options, (res) => {
+    res.on("data", (chunk) => {
+      chunks.push(chunk)
     })
-    req.on("error", (error) => {
-      fail(error)
+    res.on("end", () => {
+      const json = JSON.parse(Buffer.concat(chunks).toString())
+      console.log(json)
+      if (json.error) {
+        return reject(`${json.error.code}:${json.error.message}`)
+      }
+      const text = json.choices[0].message.content.trim() as string
+      resolve(text)
     })
-    req.write(JSON.stringify(body))
-    req.end()
   })
+  req.on("error", (error) => {
+    reject(error)
+  })
+  req.write(JSON.stringify(body))
+  req.end()
+  return promise
 }
 
 async function openai_edit(
