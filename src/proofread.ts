@@ -1,5 +1,5 @@
 import * as vscode from "vscode"
-import { request, RequestOptions } from "https"
+import { request, type RequestOptions } from "node:https"
 
 type ProofReadConfig = {
   auth_key: string
@@ -78,7 +78,7 @@ export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadC
       })
     )
 
-    vscode.window.showInformationMessage(`done`)
+    vscode.window.showInformationMessage("done")
 
     return editor.edit((builder) => {
       builder.replace(fullRange, proofed)

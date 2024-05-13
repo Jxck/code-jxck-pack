@@ -1,6 +1,6 @@
 const apiKey = ""
 
-import https from "https"
+import https from "node:https"
 
 
 async function post(url, option) {
@@ -42,7 +42,7 @@ async function proof({ input }) {
     Authorization: `Bearer ${apiKey}`
   }
   const model = "text-davinci-edit-001"
-  const instruction = `文章の誤字、脱字、スペルミスを修正してください。`
+  const instruction = "文章の誤字、脱字、スペルミスを修正してください。"
 
   const res = await post(apiUrl, {
     method: "POST",

@@ -15,8 +15,9 @@ export function decorate(editor?: vscode.TextEditor) {
   // highlight Alpha + Katakana
   const base = /[a-zA-Z\p{sc=Katakana}ー]+/gu
   lines.forEach((line, i) => {
-    let result
-    while ((result = base.exec(line))) {
+    while (true) {
+      const result = base.exec(line)
+      if (result === null) break
       const from = new vscode.Position(i, result.index)
       const to = new vscode.Position(i, result.index + result[0].length)
       const range = new vscode.Range(from, to)

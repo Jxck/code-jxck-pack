@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 function enable_format(context: vscode.ExtensionContext) {
   vscode.languages.registerDocumentFormattingEditProvider("markdown", {
     provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-      console.log(`fmt::`, { document })
+      console.log("fmt::", { document })
       const text = document.getText()
       const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
       try {
