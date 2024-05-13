@@ -143,5 +143,29 @@ export async function openAIAPI(input: string, config: OpenAIConfig) {
   return text
 }
 
-// export async function cloudeAPI(input: string, config: CloudeConfig) {
-// }
+export async function cloudeAPI(input: string, config: OpenAIConfig) {
+  const { auth_key, api_url, instruction, model, temperature } = config
+  const headers = {
+    "x-api-key": auth_key,
+    "anthropic-version": "2023-06-01",
+    "content-type": "application/json"
+  }
+  const body = JSON.stringify({
+    model,
+    max_tokens: 1024,
+    messages: [
+      {
+        role: "user",
+        content: `${instruction}\n${input}`
+      }
+    ]
+  })
+  const res = await fetch(api_url, {
+    method: "post",
+    headers,
+    body
+  })
+  const json = await res.json()
+  console.log({ json })
+  return json.content.at(0).text
+}

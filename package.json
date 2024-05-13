@@ -32,6 +32,14 @@
       {
         "command": "jxck.openAIAll",
         "title": "Jxck: run OpenAI to full file"
+      },
+      {
+        "command": "jxck.cloude",
+        "title": "Jxck: run Cloude to selected line"
+      },
+      {
+        "command": "jxck.cloudeAll",
+        "title": "Jxck: run Cloude to full file"
       }
     ],
     "keybindings": [

@@ -3,7 +3,7 @@ import { format } from "@jxck/markdown"
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { decorate } from "./highlight"
-import { openAIAPI, proofread, proofreadAll, type OpenAIConfig } from "./proofread"
+import { cloudeAPI, openAIAPI, proofread, proofreadAll, type OpenAIConfig } from "./proofread"
 import { translate } from "./translate"
 import deepl = require("deepl")
 
@@ -18,6 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
   enable_translate(context)
   enable_highlight(context)
   enable_openAI(context)
+  enable_cloude(context)
 }
 
 function enable_format(context: vscode.ExtensionContext) {
@@ -90,8 +91,8 @@ function enable_openAI(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration("jxck")
   const auth_key = config.openai_auth_key as string
   const api_url = new URL(config.openai_api_url as string)
-  const instruction = config.prompt as string
   const model = config.openai_model as string
+  const instruction = config.prompt as string
   const threshold = config.threshold as number
   const temperature = config.temperature as number
   const openAIConfig: OpenAIConfig = {
@@ -121,5 +122,39 @@ function enable_openAI(context: vscode.ExtensionContext) {
   )
 }
 
+function enable_cloude(context: vscode.ExtensionContext) {
+  const config = vscode.workspace.getConfiguration("jxck")
+  const auth_key = config.cloude_api_key as string
+  const api_url = new URL(config.cloude_api_url as string)
+  const model = config.cloude_model as string
+  const instruction = config.prompt as string
+  const threshold = config.threshold as number
+  const temperature = config.temperature as number
+  const openAIConfig: OpenAIConfig = {
+    auth_key,
+    api_url,
+    instruction,
+    model,
+    threshold,
+    temperature
+  }
+  console.log({ aiConfig: openAIConfig })
+  context.subscriptions.push(
+    vscode.commands.registerCommand("jxck.cloude", async () => {
+      if (!auth_key) {
+        return vscode.window.showErrorMessage("Cloude API Key is missing")
+      }
+      await proofread(cloudeAPI, openAIConfig)
+    })
+  )
+  context.subscriptions.push(
+    vscode.commands.registerCommand("jxck.cloudeAll", async () => {
+      if (!auth_key) {
+        return vscode.window.showErrorMessage("Cloude API Key is missing")
+      }
+      await proofreadAll(cloudeAPI, openAIConfig)
+    })
+  )
+}
 // this method is called when your extension is deactivated
 export function deactivate() {}
