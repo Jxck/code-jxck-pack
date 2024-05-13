@@ -3,7 +3,7 @@ import { format } from "@jxck/markdown"
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { decorate } from "./highlight"
-import { openai_edit, proofread, proofreadAll, type OpenAIConfig } from "./proofread"
+import { openAIAPI, proofread, proofreadAll, type OpenAIConfig } from "./proofread"
 import { translate } from "./translate"
 import deepl = require("deepl")
 
@@ -89,7 +89,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofread(openai_edit, openAIConfig)
+      await proofread(openAIAPI, openAIConfig)
     })
   )
   context.subscriptions.push(
@@ -97,7 +97,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofreadAll(openai_edit, openAIConfig)
+      await proofreadAll(openAIAPI, openAIConfig)
     })
   )
 }

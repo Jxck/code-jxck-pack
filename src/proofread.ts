@@ -108,7 +108,7 @@ export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
   }
 }
 
-export async function openai_edit(input: string, config: OpenAIConfig) {
+export async function openAIAPI(input: string, config: OpenAIConfig) {
   const { auth_key, api_url, instruction, model, temperature } = config
   const headers = {
     "Content-Type": "application/json",
