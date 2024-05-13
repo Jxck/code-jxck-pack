@@ -74,7 +74,7 @@ export async function proofreadAll(config: openAIConfig) {
 
   let proofed = text
   try {
-    await Promise.allSettled(
+    const results = await Promise.allSettled(
       sections.map(async (section, i) => {
         console.log({ section })
         const result = await openai_edit(section, config)
@@ -87,6 +87,12 @@ export async function proofreadAll(config: openAIConfig) {
         return proofed
       })
     )
+
+    results.forEach(({status}, i) => {
+      if (status === "rejected") {
+        vscode.window.showErrorMessage(`fail ${i}: ${status}`)
+      }
+    })
 
     vscode.window.showInformationMessage("done")
 
