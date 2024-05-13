@@ -94,6 +94,11 @@
           "default": null,
           "description": "Cloude API Key"
         },
+        "jxck.cloude_api_url": {
+          "type": "string",
+          "default": "https://api.anthropic.com/v1/messages",
+          "description": "Cloude API URL"
+        },
         "jxck.cloude_model": {
           "type": "string",
           "default": "claude-3-opus-20240229",
