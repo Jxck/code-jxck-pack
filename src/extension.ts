@@ -80,7 +80,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofread(aiConfig)
+      await proofread(openai_edit, aiConfig)
     })
   )
   context.subscriptions.push(
@@ -88,7 +88,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofreadAll(aiConfig)
+      await proofreadAll(openai_edit, aiConfig)
     })
   )
 }

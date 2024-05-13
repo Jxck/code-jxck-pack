@@ -9,7 +9,10 @@ export type openAIConfig = {
   threshold: number
 }
 
-export async function proofread(config: openAIConfig) {
+export type APIConfig = openAIConfig
+export type APICall = (input: string, config: APIConfig) => Promise<string>
+
+export async function proofread(apiCall: APICall, config: openAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -19,7 +22,7 @@ export async function proofread(config: openAIConfig) {
   const input = editor.document.getText(selection)
 
   try {
-    const result = await openai_edit(input, config)
+    const result = await apiCall(input, config)
 
     // diff が大きすぎる場合は何もしない
     if (Math.abs(result.length - input.length) < config.threshold) return
@@ -32,7 +35,7 @@ export async function proofread(config: openAIConfig) {
   }
 }
 
-export async function proofreadAll(config: openAIConfig) {
+export async function proofreadAll(apiCall: APICall, config: openAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -77,7 +80,7 @@ export async function proofreadAll(config: openAIConfig) {
     const results = await Promise.allSettled(
       sections.map(async (section, i) => {
         console.log({ section })
-        const result = await openai_edit(section, config)
+        const result = await apiCall(section, config)
         if (Math.abs(section.length - result.length) > config.threshold) {
           // 変更が大きすぎる場合は無視
           return proofed
