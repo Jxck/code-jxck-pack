@@ -3,7 +3,7 @@ import { format } from "@jxck/markdown"
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { decorate } from "./highlight"
-import { proofread, proofreadAll, type openAIConfig } from "./proofread"
+import { openai_edit, proofread, proofreadAll, type openAIConfig } from "./proofread"
 import { translate } from "./translate"
 import deepl = require("deepl")
 

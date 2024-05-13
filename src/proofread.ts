@@ -151,10 +151,7 @@ async function post(url: URL, body: object, option: RequestOptions): Promise<str
   return promise
 }
 
-async function openai_edit(
-  input: string,
-  { auth_key, api_url, instruction, model }: { auth_key: string; api_url: URL; instruction: string; model: string }
-) {
+export async function openai_edit(input: string, { auth_key, api_url, instruction, model }: openAIConfig) {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`
@@ -175,11 +172,11 @@ async function openai_edit(
     temperature: 0.2
   }
 
-  const res = await post(api_url, body, {
+  const result: string = await post(api_url, body, {
     method: "POST",
     headers: headers
   })
 
-  console.log(res)
-  return res
+  console.log(result)
+  return result
 }
