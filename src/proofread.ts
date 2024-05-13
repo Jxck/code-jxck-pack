@@ -126,7 +126,7 @@ export async function openai_edit(input: string, { auth_key, api_url, instructio
         content: input
       }
     ],
-    temperature: 0.2
+    temperature: 0
   })
 
   const res = await fetch(api_url, {
