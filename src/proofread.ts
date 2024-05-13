@@ -108,48 +108,6 @@ export async function proofreadAll(apiCall: APICall, config: openAIConfig) {
   }
 }
 
-function withResolvers<T>() {
-  let resolve: (value: T | PromiseLike<T>) => void;
-  let reject: (value: unknown) => void;
-  const promise = new Promise<T>((_resolve, _reject) => {
-    resolve = _resolve
-    reject =  _reject
-  })
-  //@ts-ignore
-  return { promise, resolve, reject }
-}
-
-async function post(url: URL, body: object, option: RequestOptions): Promise<string> {
-  const { hostname, pathname } = url
-  const { method, headers } = option
-
-  const options = {
-    method,
-    hostname,
-    port: 443,
-    path: pathname,
-    headers
-  }
-
-  const { promise, resolve, reject } = withResolvers<string>()
-  const chunks: Array<Uint8Array> = []
-  const req = request(options, (res) => {
-    res.on("data", (chunk) => {
-      console.log(".")
-      chunks.push(chunk)
-    })
-    res.on("end", () => {
-      resolve(Buffer.concat(chunks).toString())
-    })
-  })
-  req.on("error", (error) => {
-    reject(error)
-  })
-  req.write(JSON.stringify(body))
-  req.end()
-  return promise
-}
-
 export async function openai_edit(input: string, { auth_key, api_url, instruction, model }: openAIConfig) {
   const headers = {
     "Content-Type": "application/json",
