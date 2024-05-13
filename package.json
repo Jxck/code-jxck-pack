@@ -82,7 +82,17 @@
         "jxck.openai_threshold": {
           "type": "number",
           "default": 100,
-          "description": "Difference Threshold"
+          "description": "diff がこれを超えたら無視"
+        },
+        "jxck.cloude_api_key": {
+          "type": "string",
+          "default": null,
+          "description": "Cloude API Key"
+        },
+        "jxck.cloude_model": {
+          "type": "string",
+          "default": "claude-3-opus-20240229",
+          "description": "Cloud Model"
         }
       }
     }
