@@ -9,7 +9,12 @@ type openAIConfig = {
   threshold: number
 }
 
-export async function openAI(editor: vscode.TextEditor, config: openAIConfig) {
+export async function openAI(config: openAIConfig) {
+  const editor = vscode.window.activeTextEditor
+  if (!editor) {
+    return vscode.window.showErrorMessage("No active text editor found!")
+  }
+
   const selection = editor.selection
   const input = editor.document.getText(selection)
 
@@ -27,7 +32,12 @@ export async function openAI(editor: vscode.TextEditor, config: openAIConfig) {
   }
 }
 
-export async function openAIAll(editor: vscode.TextEditor, config: openAIConfig) {
+export async function openAIAll(config: openAIConfig) {
+  const editor = vscode.window.activeTextEditor
+  if (!editor) {
+    return console.error("No active text editor found!")
+  }
+
   const document = editor.document
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))

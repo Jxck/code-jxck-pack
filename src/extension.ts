@@ -70,11 +70,6 @@ function enable_translate(context: vscode.ExtensionContext) {
 
 function enable_openAI(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand("jxck.openAI", async () => {
-    const editor = vscode.window.activeTextEditor
-    if (!editor) {
-      return console.error("No active text editor found!")
-    }
-
     const config = vscode.workspace.getConfiguration("jxck")
     const auth_key = config.openai_auth_key as string
     const api_url = new URL(config.openai_api_url as string)
@@ -86,7 +81,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await openAI(editor, { auth_key, api_url, instruction, model, threshold })
+    await openAI({ auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
@@ -94,11 +89,6 @@ function enable_openAI(context: vscode.ExtensionContext) {
 
 function enable_openAIAll(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand("jxck.openAIAll", async () => {
-    const editor = vscode.window.activeTextEditor
-    if (!editor) {
-      return console.error("No active text editor found!")
-    }
-
     const config = vscode.workspace.getConfiguration("jxck")
     const auth_key = config.openai_auth_key as string
     const api_url = new URL(config.openai_api_url as string)
@@ -110,7 +100,7 @@ function enable_openAIAll(context: vscode.ExtensionContext) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await openAIAll(editor, { auth_key, api_url, instruction, model, threshold })
+    await openAIAll({ auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
