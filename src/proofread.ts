@@ -78,12 +78,12 @@ export async function proofreadAll(config: openAIConfig) {
       sections.map(async (section, i) => {
         console.log({ section })
         const result = await openai_edit(section, config)
-        vscode.window.showInformationMessage(`${i}: ${result}`)
         if (Math.abs(section.length - result.length) > config.threshold) {
           // 変更が大きすぎる場合は無視
           return proofed
         }
         proofed = proofed.replace(section, result)
+        vscode.window.showInformationMessage(`${i}: ${result}`)
         return proofed
       })
     )
