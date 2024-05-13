@@ -26,12 +26,12 @@
         "title": "Jxck: Highlight vtt"
       },
       {
-        "command": "jxck.proofread",
-        "title": "Jxck: Proofreading"
+        "command": "jxck.openAI",
+        "title": "Jxck: run OpenAI to selected line"
       },
       {
-        "command": "jxck.proofreadAll",
-        "title": "Jxck: Proofreading full file"
+        "command": "jxck.openAIAll",
+        "title": "Jxck: run OpenAI to full file"
       }
     ],
     "keybindings": [

@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { request, type RequestOptions } from "node:https"
 
-type ProofReadConfig = {
+type openAIConfig = {
   auth_key: string
   api_url: URL
   instruction: string
@@ -9,7 +9,7 @@ type ProofReadConfig = {
   threshold: number
 }
 
-export async function proofread(editor: vscode.TextEditor, config: ProofReadConfig) {
+export async function openAI(editor: vscode.TextEditor, config: openAIConfig) {
   const selection = editor.selection
   const input = editor.document.getText(selection)
 
@@ -23,11 +23,11 @@ export async function proofread(editor: vscode.TextEditor, config: ProofReadConf
     editor.edit((builder) => builder.replace(selection, result))
     vscode.window.showInformationMessage(result)
   } catch (error) {
-    vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
+    vscode.window.showErrorMessage(`openAI Fail: ${error}`)
   }
 }
 
-export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadConfig) {
+export async function openAIAll(editor: vscode.TextEditor, config: openAIConfig) {
   const document = editor.document
   const text = document.getText()
   const fullRange = new vscode.Range(document.positionAt(0), document.positionAt(text.length))
@@ -84,7 +84,7 @@ export async function proofreadAll(editor: vscode.TextEditor, config: ProofReadC
       builder.replace(fullRange, proofed)
     })
   } catch (error) {
-    vscode.window.showErrorMessage(`Proofread Fail: ${error}`)
+    vscode.window.showErrorMessage(`openAI Fail: ${error}`)
   }
 }
 

@@ -5,7 +5,7 @@ import { format } from "@jxck/markdown"
 import { decorate } from "./highlight"
 import { translate } from "./translate"
 import deepl = require("deepl")
-import { proofread, proofreadAll } from "./proofread"
+import { openAI, openAIAll } from "./proofread"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -17,8 +17,8 @@ export function activate(context: vscode.ExtensionContext) {
   enable_format(context)
   enable_translate(context)
   enable_highlight(context)
-  enable_proofread(context)
-  enable_proofreadAll(context)
+  enable_openAI(context)
+  enable_openAIAll(context)
 }
 
 function enable_format(context: vscode.ExtensionContext) {
@@ -68,8 +68,8 @@ function enable_translate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable)
 }
 
-function enable_proofread(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand("jxck.proofread", async () => {
+function enable_openAI(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand("jxck.openAI", async () => {
     const editor = vscode.window.activeTextEditor
     if (!editor) {
       return console.error("No active text editor found!")
@@ -86,14 +86,14 @@ function enable_proofread(context: vscode.ExtensionContext) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofread(editor, { auth_key, api_url, instruction, model, threshold })
+    await openAI(editor, { auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
 }
 
-function enable_proofreadAll(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand("jxck.proofreadAll", async () => {
+function enable_openAIAll(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand("jxck.openAIAll", async () => {
     const editor = vscode.window.activeTextEditor
     if (!editor) {
       return console.error("No active text editor found!")
@@ -110,7 +110,7 @@ function enable_proofreadAll(context: vscode.ExtensionContext) {
       return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
     }
 
-    await proofreadAll(editor, { auth_key, api_url, instruction, model, threshold })
+    await openAIAll(editor, { auth_key, api_url, instruction, model, threshold })
   })
 
   context.subscriptions.push(disposable)
