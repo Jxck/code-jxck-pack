@@ -20,7 +20,8 @@ export async function proofread(apiCall: APICall, config: openAIConfig) {
 
   const selection = editor.selection
   const input = editor.document.getText(selection)
-
+  console.log({ input });
+  
   try {
     const result = await apiCall(input, config)
 
@@ -134,16 +135,11 @@ async function post(url: URL, body: object, option: RequestOptions): Promise<str
   const chunks: Array<Uint8Array> = []
   const req = request(options, (res) => {
     res.on("data", (chunk) => {
+      console.log(".")
       chunks.push(chunk)
     })
     res.on("end", () => {
-      const json = JSON.parse(Buffer.concat(chunks).toString())
-      console.log(json)
-      if (json.error) {
-        return reject(`${json.error.code}:${json.error.message}`)
-      }
-      const text = json.choices[0].message.content.trim() as string
-      resolve(text)
+      resolve(Buffer.concat(chunks).toString())
     })
   })
   req.on("error", (error) => {
@@ -180,6 +176,11 @@ export async function openai_edit(input: string, { auth_key, api_url, instructio
     headers: headers
   })
 
-  console.log(result)
-  return result
+  const json = JSON.parse(result)
+  console.log(json)
+  if (json.error) {
+    throw new Error(`${json.error.code}:${json.error.message}`)
+  }
+  const text = json.choices[0].message.content.trim() as string
+  return text
 }
