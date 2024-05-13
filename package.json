@@ -5,7 +5,7 @@
   "description": "jxck extension pack",
   "version": "4.4.0",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.89.1"
   },
   "categories": [
     "Other"
