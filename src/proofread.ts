@@ -142,3 +142,6 @@ export async function openAIAPI(input: string, config: OpenAIConfig) {
   const text = json.choices[0].message.content.trim() as string
   return text
 }
+
+// export async function cloudeAPI(input: string, config: CloudeConfig) {
+// }

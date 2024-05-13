@@ -67,6 +67,25 @@ function enable_translate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable)
 }
 
+function enable_highlight(context: vscode.ExtensionContext) {
+  decorate(vscode.window.activeTextEditor)
+
+  vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
+
+  vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
+
+  vscode.workspace.onWillSaveTextDocument((event) => {
+    const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
+    decorate(openEditor)
+  })
+
+  const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
+    decorate(vscode.window.activeTextEditor)
+  })
+
+  context.subscriptions.push(disposable)
+}
+
 function enable_openAI(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration("jxck")
   const auth_key = config.openai_auth_key as string
@@ -100,25 +119,6 @@ function enable_openAI(context: vscode.ExtensionContext) {
       await proofreadAll(openAIAPI, openAIConfig)
     })
   )
-}
-
-function enable_highlight(context: vscode.ExtensionContext) {
-  decorate(vscode.window.activeTextEditor)
-
-  vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
-
-  vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
-
-  vscode.workspace.onWillSaveTextDocument((event) => {
-    const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
-    decorate(openEditor)
-  })
-
-  const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
-    decorate(vscode.window.activeTextEditor)
-  })
-
-  context.subscriptions.push(disposable)
 }
 
 // this method is called when your extension is deactivated
