@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { request, type RequestOptions } from "node:https"
 
-type openAIConfig = {
+export type openAIConfig = {
   auth_key: string
   api_url: URL
   instruction: string

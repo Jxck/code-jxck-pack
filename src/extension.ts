@@ -5,7 +5,7 @@ import { format } from "@jxck/markdown"
 import { decorate } from "./highlight"
 import { translate } from "./translate"
 import deepl = require("deepl")
-import { openAI, openAIAll } from "./proofread"
+import { openAI, openAIAll, openAIConfig } from "./proofread"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -74,12 +74,13 @@ function enable_openAI(context: vscode.ExtensionContext) {
   const instruction = config.openai_prompt as string
   const model = config.openai_model as string
   const threshold = config.openai_threshold as number
+  const aiConfig: openAIConfig = { auth_key, api_url, instruction, model, threshold }
   context.subscriptions.push(
     vscode.commands.registerCommand("jxck.openAI", async () => {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await openAI({ auth_key, api_url, instruction, model, threshold })
+      await openAI(aiConfig)
     })
   )
   context.subscriptions.push(
@@ -87,7 +88,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await openAIAll({ auth_key, api_url, instruction, model, threshold })
+      await openAIAll(aiConfig)
     })
   )
 }
