@@ -59,6 +59,21 @@
           "default": true,
           "description": "Deepl Free API"
         },
+        "jxck.prompt": {
+          "type": "string",
+          "default": "文章の誤字、脱字、スペルミスを修正してください。",
+          "description": "OpenAI Prompt"
+        },
+        "jxck.temperature": {
+          "type": "number",
+          "default": 0,
+          "description": "API temperature"
+        },
+        "jxck.threshold": {
+          "type": "number",
+          "default": 100,
+          "description": "diff がこれを超えたら無視"
+        },
         "jxck.openai_auth_key": {
           "type": "string",
           "default": null,
@@ -73,16 +88,6 @@
           "type": "string",
           "default": "gpt-4",
           "description": "OpenAI Model Name"
-        },
-        "jxck.openai_prompt": {
-          "type": "string",
-          "default": "文章の誤字、脱字、スペルミスを修正してください。",
-          "description": "OpenAI Prompt"
-        },
-        "jxck.openai_threshold": {
-          "type": "number",
-          "default": 100,
-          "description": "diff がこれを超えたら無視"
         },
         "jxck.cloude_api_key": {
           "type": "string",

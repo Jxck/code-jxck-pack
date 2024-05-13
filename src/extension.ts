@@ -3,7 +3,7 @@ import { format } from "@jxck/markdown"
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { decorate } from "./highlight"
-import { openai_edit, proofread, proofreadAll, type openAIConfig } from "./proofread"
+import { openai_edit, proofread, proofreadAll, type OpenAIConfig } from "./proofread"
 import { translate } from "./translate"
 import deepl = require("deepl")
 
@@ -71,16 +71,25 @@ function enable_openAI(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration("jxck")
   const auth_key = config.openai_auth_key as string
   const api_url = new URL(config.openai_api_url as string)
-  const instruction = config.openai_prompt as string
+  const instruction = config.prompt as string
   const model = config.openai_model as string
-  const threshold = config.openai_threshold as number
-  const aiConfig: openAIConfig = { auth_key, api_url, instruction, model, threshold }
+  const threshold = config.threshold as number
+  const temperature = config.temperature as number
+  const openAIConfig: OpenAIConfig = {
+    auth_key,
+    api_url,
+    instruction,
+    model,
+    threshold,
+    temperature
+  }
+  console.log({aiConfig: openAIConfig});
   context.subscriptions.push(
     vscode.commands.registerCommand("jxck.openAI", async () => {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofread(openai_edit, aiConfig)
+      await proofread(openai_edit, openAIConfig)
     })
   )
   context.subscriptions.push(
@@ -88,7 +97,7 @@ function enable_openAI(context: vscode.ExtensionContext) {
       if (!auth_key) {
         return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
       }
-      await proofreadAll(openai_edit, aiConfig)
+      await proofreadAll(openai_edit, openAIConfig)
     })
   )
 }

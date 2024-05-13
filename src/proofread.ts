@@ -1,18 +1,18 @@
-import { type RequestOptions, request } from "node:https"
 import * as vscode from "vscode"
 
-export type openAIConfig = {
+export type OpenAIConfig = {
   auth_key: string
   api_url: URL
   instruction: string
   model: string
   threshold: number
+  temperature: number
 }
 
-export type APIConfig = openAIConfig
+export type APIConfig = OpenAIConfig
 export type APICall = (input: string, config: APIConfig) => Promise<string>
 
-export async function proofread(apiCall: APICall, config: openAIConfig) {
+export async function proofread(apiCall: APICall, config: OpenAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -36,7 +36,7 @@ export async function proofread(apiCall: APICall, config: openAIConfig) {
   }
 }
 
-export async function proofreadAll(apiCall: APICall, config: openAIConfig) {
+export async function proofreadAll(apiCall: APICall, config: OpenAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
     return vscode.window.showErrorMessage("No active text editor found!")
@@ -108,7 +108,8 @@ export async function proofreadAll(apiCall: APICall, config: openAIConfig) {
   }
 }
 
-export async function openai_edit(input: string, { auth_key, api_url, instruction, model }: openAIConfig) {
+export async function openai_edit(input: string, config: OpenAIConfig) {
+  const { auth_key, api_url, instruction, model, temperature } = config
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${auth_key}`
@@ -126,7 +127,7 @@ export async function openai_edit(input: string, { auth_key, api_url, instructio
         content: input
       }
     ],
-    temperature: 0
+    temperature
   })
 
   const res = await fetch(api_url, {
