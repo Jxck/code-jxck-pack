@@ -74,7 +74,7 @@ export async function proofreadAll(config: openAIConfig) {
 
   let proofed = text
   try {
-    await Promise.all(
+    await Promise.allSettled(
       sections.map(async (section, i) => {
         console.log({ section })
         const result = await openai_edit(section, config)
