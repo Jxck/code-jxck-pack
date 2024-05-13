@@ -1,5 +1,5 @@
+import { type RequestOptions, request } from "node:https"
 import * as vscode from "vscode"
-import { request, type RequestOptions } from "node:https"
 
 export type openAIConfig = {
   auth_key: string
@@ -35,7 +35,7 @@ export async function proofread(config: openAIConfig) {
 export async function proofreadAll(config: openAIConfig) {
   const editor = vscode.window.activeTextEditor
   if (!editor) {
-    return console.error("No active text editor found!")
+    return vscode.window.showErrorMessage("No active text editor found!")
   }
 
   const document = editor.document

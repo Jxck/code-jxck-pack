@@ -1,11 +1,11 @@
+import { format } from "@jxck/markdown"
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
-import { format } from "@jxck/markdown"
 import { decorate } from "./highlight"
+import { proofread, proofreadAll, type openAIConfig } from "./proofread"
 import { translate } from "./translate"
 import deepl = require("deepl")
-import { proofread, proofreadAll, openAIConfig } from "./proofread"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
