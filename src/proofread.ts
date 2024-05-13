@@ -156,7 +156,7 @@ export async function openai_edit(input: string, { auth_key, api_url, instructio
     Authorization: `Bearer ${auth_key}`
   }
 
-  const body = {
+  const body = JSON.stringify({
     model,
     messages: [
       {
@@ -169,15 +169,16 @@ export async function openai_edit(input: string, { auth_key, api_url, instructio
       }
     ],
     temperature: 0.2
-  }
-
-  const result: string = await post(api_url, body, {
-    method: "POST",
-    headers: headers
   })
 
-  const json = JSON.parse(result)
+  const res = await fetch(api_url, {
+    method: "POST",
+    headers,
+    body
+  })
+  const json = await res.json()
   console.log(json)
+
   if (json.error) {
     throw new Error(`${json.error.code}:${json.error.message}`)
   }
