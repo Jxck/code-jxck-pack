@@ -18,7 +18,6 @@ export function activate(context: vscode.ExtensionContext) {
   enable_translate(context)
   enable_highlight(context)
   enable_openAI(context)
-  enable_openAIAll(context)
 }
 
 function enable_format(context: vscode.ExtensionContext) {
@@ -69,41 +68,28 @@ function enable_translate(context: vscode.ExtensionContext) {
 }
 
 function enable_openAI(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand("jxck.openAI", async () => {
-    const config = vscode.workspace.getConfiguration("jxck")
-    const auth_key = config.openai_auth_key as string
-    const api_url = new URL(config.openai_api_url as string)
-    const instruction = config.openai_prompt as string
-    const model = config.openai_model as string
-    const threshold = config.openai_threshold as number
-
-    if (!auth_key) {
-      return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
-    }
-
-    await openAI({ auth_key, api_url, instruction, model, threshold })
-  })
-
-  context.subscriptions.push(disposable)
-}
-
-function enable_openAIAll(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand("jxck.openAIAll", async () => {
-    const config = vscode.workspace.getConfiguration("jxck")
-    const auth_key = config.openai_auth_key as string
-    const api_url = new URL(config.openai_api_url as string)
-    const instruction = config.openai_prompt as string
-    const model = config.openai_model as string
-    const threshold = config.openai_threshold as number
-
-    if (!auth_key) {
-      return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
-    }
-
-    await openAIAll({ auth_key, api_url, instruction, model, threshold })
-  })
-
-  context.subscriptions.push(disposable)
+  const config = vscode.workspace.getConfiguration("jxck")
+  const auth_key = config.openai_auth_key as string
+  const api_url = new URL(config.openai_api_url as string)
+  const instruction = config.openai_prompt as string
+  const model = config.openai_model as string
+  const threshold = config.openai_threshold as number
+  context.subscriptions.push(
+    vscode.commands.registerCommand("jxck.openAI", async () => {
+      if (!auth_key) {
+        return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
+      }
+      await openAI({ auth_key, api_url, instruction, model, threshold })
+    })
+  )
+  context.subscriptions.push(
+    vscode.commands.registerCommand("jxck.openAIAll", async () => {
+      if (!auth_key) {
+        return vscode.window.showErrorMessage("OpenAI Auth Key is missing")
+      }
+      await openAIAll({ auth_key, api_url, instruction, model, threshold })
+    })
+  )
 }
 
 function enable_highlight(context: vscode.ExtensionContext) {
