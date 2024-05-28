@@ -25,12 +25,16 @@ export async function proofread(apiCall: APICall, config: APIConfig) {
     const result = await apiCall(input, config)
 
     // diff が大きすぎる場合は何もしない
-    if (Math.abs(result.length - input.length) < config.threshold) return
+    if (Math.abs(result.length - input.length) > config.threshold) {
+      vscode.window.showInformationMessage(`too much diff > ${config.threshold}`)
+      return
+    }
 
     console.log({ result })
     editor.edit((builder) => builder.replace(selection, result))
     vscode.window.showInformationMessage(result)
   } catch (error) {
+    console.log(error)
     vscode.window.showErrorMessage(`openAI Fail: ${error}`)
   }
 }
@@ -81,6 +85,7 @@ export async function proofreadAll(apiCall: APICall, config: APIConfig) {
         const result = await apiCall(section, config)
         if (Math.abs(section.length - result.length) > config.threshold) {
           // 変更が大きすぎる場合は無視
+          vscode.window.showInformationMessage(`too much diff > ${config.threshold}`)
           return proofed
         }
         proofed = proofed.replace(section, result)
@@ -101,7 +106,8 @@ export async function proofreadAll(apiCall: APICall, config: APIConfig) {
       builder.replace(fullRange, proofed)
     })
   } catch (error) {
-    vscode.window.showErrorMessage(`openAI Fail: ${error}`)
+    console.log(error)
+    vscode.window.showErrorMessage(`proofread Fail: ${error}`)
   }
 }
 
