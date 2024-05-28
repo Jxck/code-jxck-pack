@@ -1,6 +1,6 @@
 # code-jxck-pack
 
-This is vscode extension pack for Jxck personal use.
+This is a vscode extension pack for Jxck's personal use.
 
 ## publish
 
