@@ -144,8 +144,10 @@ export async function openAIAPI(input: string, config: APIConfig) {
   if (json.error) {
     throw new Error(`${json.error.code}:${json.error.message}`)
   }
-  const text = json.choices[0].message.content.trim() as string
-  return text
+  const output = json.choices[0].message.content.trim() as string
+  console.log("input ", input)
+  console.log("output", output)
+  return output
 }
 
 export async function cloudeAPI(input: string, config: APIConfig) {
@@ -172,5 +174,8 @@ export async function cloudeAPI(input: string, config: APIConfig) {
   })
   const json = await res.json()
   console.log({ json })
-  return json.content.at(0).text
+  const output = json.content.at(0).text.replaceAll("修正後の文章:", "")
+  console.log("input ", input)
+  console.log("output", output)
+  return output
 }

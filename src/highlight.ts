@@ -2,10 +2,12 @@ import * as vscode from "vscode"
 
 export function decorate(editor?: vscode.TextEditor) {
   if (editor === undefined) {
-    return console.error("active editor not found for highlight")
+    // return console.error("active editor not found for highlight")
+    return
   }
   if (editor.document.languageId !== "subtitles") {
-    return console.error("highlight only supported in .vtt")
+    // return console.error("highlight only supported in .vtt")
+    return
   }
 
   const text = editor.document.getText()
