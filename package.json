@@ -3,7 +3,7 @@
   "displayName": "jxck",
   "publisher": "jxck",
   "description": "jxck extension pack",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "engines": {
     "vscode": "^1.89.1"
   },
