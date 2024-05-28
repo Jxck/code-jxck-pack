@@ -6,7 +6,8 @@ This is a vscode extension pack for Jxck's personal use.
 
 ```sh
 $ vsce login jxck
-$ vsce publish patch
+$ npm run publish
+# no npm version patch
 ```
 
 - marketplace
