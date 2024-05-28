@@ -125,7 +125,8 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run fmt && npm run compile-tests && npm run compile",
     "fmt": "prettier -w src/*.ts *.json *.js *.md",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "publish": "npm run compile && vsce publish patch"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
