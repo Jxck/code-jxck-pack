@@ -69,19 +69,17 @@ function enable_translate(context: vscode.ExtensionContext) {
 }
 
 function enable_highlight(context: vscode.ExtensionContext) {
-  decorate(vscode.window.activeTextEditor)
-
-  vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
-
-  vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
-
-  vscode.workspace.onWillSaveTextDocument((event) => {
-    const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
-    decorate(openEditor)
-  })
-
   const disposable = vscode.commands.registerCommand("jxck.highlight", async () => {
     decorate(vscode.window.activeTextEditor)
+
+    vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
+
+    vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
+  
+    vscode.workspace.onWillSaveTextDocument((event) => {
+      const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
+      decorate(openEditor)
+    })
   })
 
   context.subscriptions.push(disposable)
