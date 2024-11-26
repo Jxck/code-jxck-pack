@@ -5,6 +5,7 @@ import * as vscode from "vscode"
 import { decorate } from "./highlight"
 import { cloudeAPI, openAIAPI, proofread, proofreadAll, type APIConfig } from "./proofread"
 import { translate } from "./translate"
+import { replace } from "./replace"
 import deepl = require("deepl")
 
 // this method is called when your extension is activated
@@ -14,11 +15,33 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log(`Congratulations, your extension "jxck" is now active!`)
   console.log(process.version)
+  enable_replace(context)
   enable_format(context)
   enable_translate(context)
   enable_highlight(context)
   enable_openAI(context)
   enable_cloude(context)
+}
+
+function enable_replace(context: vscode.ExtensionContext) {
+  const disposable = vscode.commands.registerCommand("jxck.replace", async () => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) {
+      return console.error("No active text editor found!")
+    }
+
+    const config = vscode.workspace.getConfiguration("jxck")
+    const dict = config.replace_dict as Array<string>
+    if (!dict) {
+      return vscode.window.showErrorMessage("Replace Dict is missing")
+    }
+
+    vscode.window.showInformationMessage(`Replacing Words....`)
+
+    await replace(editor, { dict })
+  })
+
+  context.subscriptions.push(disposable)
 }
 
 function enable_format(context: vscode.ExtensionContext) {
@@ -75,7 +98,7 @@ function enable_highlight(context: vscode.ExtensionContext) {
     vscode.window.onDidChangeActiveTextEditor((editor) => decorate(editor), null, context.subscriptions)
 
     vscode.workspace.onDidChangeTextDocument(() => decorate(vscode.window.activeTextEditor), null, context.subscriptions)
-  
+
     vscode.workspace.onWillSaveTextDocument((event) => {
       const openEditor = vscode.window.visibleTextEditors.filter((editor) => editor.document.uri === event.document.uri)[0]
       decorate(openEditor)
