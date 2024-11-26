@@ -37,8 +37,8 @@ function enable_replace(context: vscode.ExtensionContext) {
     }
 
     vscode.window.showInformationMessage(`Replacing Words....`)
-
     await replace(editor, { dict })
+    vscode.window.showInformationMessage(`Replacing Words Done!`)
   })
 
   context.subscriptions.push(disposable)
