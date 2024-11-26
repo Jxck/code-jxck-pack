@@ -4,7 +4,7 @@
   "publisher": "jxck",
   "description": "jxck extension pack",
   "repository": "https://github.com/jxck/code-jxck-pack",
-  "version": "4.5.8",
+  "version": "4.5.9",
   "engines": {
     "vscode": "^1.95.0"
   },
